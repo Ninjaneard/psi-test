@@ -29,7 +29,7 @@ export type Pitanje = {
 export type Odgovor = {
     ID: number,
     Odgovor: string,
-    tacan: boolean,
+    tacan: number,
     pitanje: number
 }
 
@@ -40,4 +40,8 @@ export type PitanjeFront = {
     izbor: boolean,
     Odgovor: string,
     Odgovori: Array<Odgovor>
+}
+export type IspitModel = {
+    tema: number,
+    nPitanja: number
 }

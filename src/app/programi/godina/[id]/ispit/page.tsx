@@ -1,6 +1,7 @@
 import {PoolOptions} from "mysql2";
 import * as mysql from "mysql2/promise";
 import IspitForm from "@/app/ui/ispitForm";
+import {Tema} from "@/app/models";
 
 
 async function getData(id:number){
@@ -16,10 +17,11 @@ async function getData(id:number){
 }
 export default async function Page({params}:{params:{id:number}})
 {
-    let godina = params.id;
+    //let godina = params.id;
+    let teme = await getData(params.id) as Array<Tema>;
     return (
         <section className={`p-10`}>
-            <IspitForm godina={godina}></IspitForm>
+            <IspitForm teme={teme}></IspitForm>
         </section>
     )
 }
