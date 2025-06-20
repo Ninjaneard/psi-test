@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+/public/.~lock.ispit_KBT_prvaWed Jun 18 2025.docx#
+/public/ispit.docx
+/public/ispit.txt
+/ispit.txt
+/public/ispit_KBT_prvaThu Jun 19 2025.docx
+/public/ispit_KBT_prvaThu Jun 19 2025_kljuc.docx
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/vcs.xml

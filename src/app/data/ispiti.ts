@@ -38,6 +38,28 @@ export async function addQuestion(formData:FormData)
         }
     }
 }
+function pickRandomElements(arr, n) {
+    // Create a shallow copy of the array to avoid modifying the original
+    const shuffled = [...arr];
+    let currentIndex = shuffled.length;
+    let randomIndex;
+
+    // While there remain elements to shuffle.
+    while (currentIndex !== 0) {
+        // Pick a remaining element.
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+
+        // And swap it with the current element.
+        [shuffled[currentIndex], shuffled[randomIndex]] = [
+            shuffled[randomIndex],
+            shuffled[currentIndex],
+        ];
+    }
+
+    // Return the first n elements of the shuffled array
+    return shuffled.slice(0, n);
+}
 
 export async function generateIspit(ispitTemplate: Array<IspitModel>){
     const access: PoolOptions = {
@@ -62,14 +84,17 @@ export async function generateIspit(ispitTemplate: Array<IspitModel>){
             console.log(pitanja2);
             if(pitanja2.length > 0)
             {
-                let pitanjaR = Array.from({length: tema.nPitanja }, () => Math.floor(Math.random() * (pitanja2.length)));
-                //console.log(pitanjaR, pitanja2);
-                for( let pitanjars of pitanjaR)
-                {
-                    pitanjaTmp.push(pitanja2[pitanjars])
-                }
+                // let pitanjaR = Array.from({length: tema.nPitanja }, () => Math.floor(Math.random() * (pitanja2.length)));
+                // //console.log(pitanjaR, pitanja2);
+                // for( let pitanjars of pitanjaR)
+                // {
+                //     pitanjaTmp.push(pitanja2[pitanjars])
+                // }
+                var randPitanja = pickRandomElements(pitanja2, tema.nPitanja);
+                console.log(randPitanja);
+                pitanjaTmp = randPitanja;
             }
-            console.log(pitanjaTmp);
+            console.log(tema ,pitanjaTmp.length);
             for(let pitanje of pitanjaTmp){
                 let query3 = `SELECT * FROM odgovori WHERE Pitanje=${pitanje.ID}`;
                 let result3 = await conn.query(query3);
@@ -83,7 +108,6 @@ export async function generateIspit(ispitTemplate: Array<IspitModel>){
             pitanja = pitanja.concat(pitanjaTmp);
             // console.log(pitanja);
             //console.log(pitanja);
-
             queryt = `SELECT godina.naziv as god, p.naziv as naziv FROM GODINA  RIGHT JOIN ispiti.program p on p.ID = GODINA.program Left Join ispiti.tema t on GODINA.ID = t.Godina WHERE t.ID=${tema.tema}`;
 
         }
@@ -103,18 +127,19 @@ export async function generateIspit(ispitTemplate: Array<IspitModel>){
             let ansCount = 1;
             let odgovoriTxt = '';
             for(let odg of pitanje.Odgovori){
+                if(odg.tacan[0])
+                    fileK += '[+]';
                 file.push(`\t ${ansCount}. ${odg.Odgovor} \n`) ;
                 fileK += `\t ${ansCount}. ${odg.Odgovor} `;
-                console.log(odg.tacan[0]);
-                if(odg.tacan[0])
-                    fileK += '*';
+               // console.log(odg.tacan[0]);
+
                 fileK += '\n';
                 ansCount ++;
             }
             //doc.text(odgovoriTxt, 10, 10);
             file.push('\n')
         }
-        if(pitanje.opisno){
+        if(pitanje.opisno[0]){
             // doc.text('/n/n/n/n/n',1,1);
             file.push('Odgovor:\n');
             file.push('\n');
