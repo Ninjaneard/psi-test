@@ -1,7 +1,5 @@
 //import * as mysql from 'mysql2';
-import * as mysql from 'mysql2/promise';
-import {PoolOptions} from "mysql2";
-import {Program} from "@/app/models";
+
 import ProgramList from "@/app/ui/programs";
 
 export default async function Page() {

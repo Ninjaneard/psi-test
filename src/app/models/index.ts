@@ -29,15 +29,15 @@ export type Pitanje = {
 export type Odgovor = {
     ID: number,
     Odgovor: string,
-    tacan: number,
+    tacan: Buffer,
     pitanje: number
 }
 
 export type PitanjeFront = {
     ID: number,
     Pitanje:string,
-    opisno: boolean,
-    izbor: boolean,
+    opisno: Buffer,
+    izbor: Buffer,
     Odgovor: string,
     Odgovori: Array<Odgovor>
 }

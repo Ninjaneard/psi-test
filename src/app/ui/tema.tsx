@@ -1,5 +1,4 @@
-import {Godina, Program, Tema} from "@/app/models";
-import Link from "next/link";
+import { Tema} from "@/app/models";
 import QuestionForm from "@/app/ui/questionForm";
 import QuestionsList from "@/app/ui/Questions";
 

@@ -1,5 +1,4 @@
-import {PoolOptions} from "mysql2";
-import * as mysql from "mysql2/promise";
+
 import {Program} from "@/app/models";
 import Link from "next/link";
 import dbPool from "@/app/lib/myslq";
@@ -7,12 +6,12 @@ import dbPool from "@/app/lib/myslq";
 async function getData(){
 
     const conn = dbPool;
-    var list = await conn.query("SELECT * FROM program");
+    const list = await conn.query("SELECT * FROM program");
     console.log(list);
     return list[0];
 }
 export default async function  ProgramList(){
-    var data = await getData() as Array<Program>
+    const data = await getData() as Array<Program>
     console.log(data);
     return (
         <div>

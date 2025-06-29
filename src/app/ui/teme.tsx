@@ -1,4 +1,4 @@
-import {Godina, Program, Tema} from "@/app/models";
+import { Tema} from "@/app/models";
 import Link from "next/link";
 
 export default async function  TemaList({teme}: { teme: Array<Tema> }){

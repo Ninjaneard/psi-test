@@ -1,9 +1,9 @@
-import {PoolOptions} from "mysql2";
+
 import * as mysql from "mysql2/promise";
 import {Pool} from "mysql2/promise";
 
 declare global {
-    var _mySQLPool : Pool;
+    const _mySQLPool : Pool;
 }
 export interface IDBSettings {
     host: string
@@ -52,12 +52,13 @@ class Singleton {
     private static _instance: Singleton;
     private pool: Pool;
     private constructor() {
+        console.log(process.env.NODE_ENV, GetDBSettings());
         this.pool = mysql.createPool(GetDBSettings());
        // this.clientPromise = this.client.connect();
         if (process.env.NODE_ENV === 'development') {
             // In development mode, use a global variable so that the value
             // is preserved across module reloads caused by HMR (Hot Module Replacement).
-            global._mySQLPool = this.pool;
+            //global._mySQLPool = this.pool;
         }
     }
 

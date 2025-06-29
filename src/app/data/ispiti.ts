@@ -1,40 +1,40 @@
 'use server'
-import {PoolOptions} from "mysql2";
-import * as mysql from "mysql2/promise";
-import {Query} from "mysql2/typings/mysql/lib/protocol/sequences/Query";
-import {IspitModel, Odgovor, PitanjeFront, Tema} from "@/app/models";
+import { ResultSetHeader, RowDataPacket} from "mysql2";
+
+
+import {IspitModel, Odgovor, PitanjeFront} from "@/app/models";
 import {writeFileSync} from "node:fs";
 import dbPool from "@/app/lib/myslq";
-const { jsPDF } = require("jspdf");
+
 
 export async function addQuestion(formData:FormData)
 {
-    var pitanje = formData.get('pitanje');
-    var izbori = formData.get('Izbor')=='on'?true:false;
-    var tema = formData.get('tema')
-    var opis = formData.get('Opisno')=='on'?true:false;
-    var odgovor = formData.get('odgovor');
+    const pitanje = formData.get('pitanje');
+    const izbori = formData.get('Izbor')=='on'?true:false;
+    const tema = formData.get('tema')
+    const opis = formData.get('Opisno')=='on'?true:false;
+    const odgovor = formData.get('odgovor');
     const conn = dbPool;
-    var result = await  conn.execute(`INSERT INTO pitanja (Pitanje, izbor, opisno, Odgovor, Tema) VALUES ('${pitanje}',${izbori},${opis},'${odgovor}',${tema} )`)
+    const result = await  conn.execute<ResultSetHeader>(`INSERT INTO pitanja (Pitanje, izbor, opisno, Odgovor, Tema) VALUES ('${pitanje}',${izbori},${opis},'${odgovor}',${tema} )`)
  //   console.log(result[0].insertId);
-    var poitanjeId = result[0].insertId;
+    const poitanjeId = result[0].insertId;
     if(poitanjeId > 0 && izbori)
     {
-        for(var i = 1; i<15 ; i++)
+        for(let i = 1; i<15 ; i++)
         {
-            var odgovori = formData.get(`odgovori[${i}]`);
-            var tacni = formData.get(`tacan[${i}]`)=='on'?true:false;
+            const odgovori = formData.get(`odgovori[${i}]`);
+            const tacni = formData.get(`tacan[${i}]`)=='on'?true:false;
            // console.log(i, odgovori, tacni);
             if(odgovori != '')
             {
-                var query = `INSERT INTO odgovori (Odgovor, tacan, pitanje) VALUES ('${odgovori}', ${tacni}, ${poitanjeId})`
-                var result2 = await conn.execute(query);
-               // console.log(i, result2[0].insertId)
+                const query = `INSERT INTO odgovori (Odgovor, tacan, pitanje) VALUES ('${odgovori}', ${tacni}, ${poitanjeId})`
+                const result2 = await conn.execute(query);
+                console.log(i, result2)
             }
         }
     }
 }
-function pickRandomElements(arr, n) {
+function pickRandomElements(arr:Array<PitanjeFront>, n:number) {
     // Create a shallow copy of the array to avoid modifying the original
     const shuffled = [...arr];
     let currentIndex = shuffled.length;
@@ -59,18 +59,18 @@ function pickRandomElements(arr, n) {
 
 export async function generateIspit(ispitTemplate: Array<IspitModel>){
     const conn = dbPool;
-    let file = Array();
+    const file = [];
     let fileK = '';
-    let pitanja : Array<PitanjeFront> = new Array<PitanjeFront>();
+    let pitanja : PitanjeFront[] = new Array<PitanjeFront>();
     console.log(ispitTemplate);
     let queryt = '';
-    for(let tema of ispitTemplate){
+    for(const tema of ispitTemplate){
         let pitanja2 = new Array<PitanjeFront>();
         let pitanjaTmp = new Array<PitanjeFront>()
         if(tema != undefined)
         {
-            let query2 = `SELECT * FROM pitanja WHERE Tema=${tema.tema}`;
-            let result2 = await conn.query(query2);
+            const query2 = `SELECT * FROM pitanja WHERE Tema=${tema.tema}`;
+            const result2 = await conn.query(query2);
             pitanja2 = result2[0] as Array<PitanjeFront>;
             console.log(pitanja2);
             if(pitanja2.length > 0)
@@ -81,16 +81,16 @@ export async function generateIspit(ispitTemplate: Array<IspitModel>){
                 // {
                 //     pitanjaTmp.push(pitanja2[pitanjars])
                 // }
-                var randPitanja = pickRandomElements(pitanja2, tema.nPitanja);
+                const randPitanja = pickRandomElements(pitanja2, tema.nPitanja);
                 console.log(randPitanja);
                 pitanjaTmp = randPitanja;
             }
             console.log(tema ,pitanjaTmp.length);
-            for(let pitanje of pitanjaTmp){
-                let query3 = `SELECT * FROM odgovori WHERE Pitanje=${pitanje.ID}`;
-                let result3 = await conn.query(query3);
-                let odgovor = result3[0] as Array<Odgovor>;
-                let odgovori :Array<Odgovor> = new Array<Odgovor>();
+            for(const pitanje of pitanjaTmp){
+                const query3 = `SELECT * FROM odgovori WHERE Pitanje=${pitanje.ID}`;
+                const result3 = await conn.query(query3);
+                const odgovor = result3[0] as Array<Odgovor>;
+
 
                 pitanje.Odgovori=odgovor;
                 // console.log(pitanja);
@@ -107,17 +107,17 @@ export async function generateIspit(ispitTemplate: Array<IspitModel>){
     }
     let count = 1;
 
-    for(let pitanje of pitanja)
+    for(const pitanje of pitanja)
     {
-        var pitanjeTxt = `${count}) ${pitanje.Pitanje} \n`;
+        const pitanjeTxt = `${count}) ${pitanje.Pitanje} \n`;
 
         //doc.text(pitanjeTxt, 1, 1);
         file.push(pitanjeTxt)
         fileK += pitanjeTxt;
         if(pitanje.izbor){
             let ansCount = 1;
-            let odgovoriTxt = '';
-            for(let odg of pitanje.Odgovori){
+
+            for(const odg of pitanje.Odgovori){
                 if(odg.tacan[0])
                     fileK += '[+]';
                 file.push(`\t ${ansCount}. ${odg.Odgovor} \n`) ;
@@ -140,13 +140,13 @@ export async function generateIspit(ispitTemplate: Array<IspitModel>){
         }
         count ++;
     }
-    let rest = await conn.query(queryt);
+    const rest = await conn.query<RowDataPacket[]>(queryt);
     //console.log(rest);
-    let date = new Date().toDateString();
-    let naziv = rest[0][0].naziv;
-    let god = rest[0][0].god;
+    const date = new Date().toDateString();
+    const naziv = rest[0][0].naziv;
+    const god = rest[0][0].god;
    // doc.save('../ispit_test.pdf');
-    var resp = {
+    const resp = {
         ispit:'',
         kljuc:''
     };

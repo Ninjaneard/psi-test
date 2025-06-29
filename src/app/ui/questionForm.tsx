@@ -1,5 +1,4 @@
-import {Godina, Program, Tema} from "@/app/models";
-import Link from "next/link";
+
 import {addQuestion} from "@/app/data/ispiti";
 
 export default async function  QuestionForm({temaID}: { temaID: number }){

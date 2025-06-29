@@ -1,18 +1,15 @@
-import {Godina, Pitanje, Program, Tema} from "@/app/models";
-import Link from "next/link";
-import QuestionForm from "@/app/ui/questionForm";
-import {PoolOptions} from "mysql2";
-import * as mysql from "mysql2/promise";
+import { Pitanje} from "@/app/models";
+
 import dbPool from "@/app/lib/myslq";
 
-async function getQuestions(temaID){
+async function getQuestions(temaID:number){
     const conn = dbPool;
-    var list = await conn.query(`SELECT * FROM pitanja WHERE tema=${temaID}`);
+    const list = await conn.query(`SELECT * FROM pitanja WHERE tema=${temaID}`);
     console.log(list);
     return list[0];
 }
 export default async function  QuestionsList({tema}: { tema: number }){
-    var pitanja = await getQuestions(tema) as Array<Pitanje>;
+    const pitanja = await getQuestions(tema) as Array<Pitanje>;
     console.log(pitanja);
     return (
         <div>

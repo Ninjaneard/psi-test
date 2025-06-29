@@ -1,4 +1,4 @@
-import {Godina, Program} from "@/app/models";
+import {Godina} from "@/app/models";
 import Link from "next/link";
 
 export default async function  GodinaList({godine}: { godine: Array<Godina> }){
