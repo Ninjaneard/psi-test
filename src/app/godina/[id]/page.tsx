@@ -3,14 +3,10 @@ import * as mysql from "mysql2/promise";
 import {Godina, Tema} from "@/app/models";
 import GodinaList from "@/app/ui/godine";
 import TemaList from "@/app/ui/teme";
+import dbPool from "@/app/lib/myslq";
 
 async function getData(id:number){
-    const access: PoolOptions = {
-        user: 'root',
-        database: 'ispiti',
-        password: 'nov1987'
-    };
-    const conn = mysql.createPool(access);
+    const conn = dbPool;
     var list = await conn.query(`SELECT * FROM tema WHERE godina=${id}`);
     console.log(list);
     return list[0];

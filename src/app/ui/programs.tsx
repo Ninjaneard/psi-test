@@ -2,14 +2,11 @@ import {PoolOptions} from "mysql2";
 import * as mysql from "mysql2/promise";
 import {Program} from "@/app/models";
 import Link from "next/link";
+import dbPool from "@/app/lib/myslq";
 
 async function getData(){
-    const access: PoolOptions = {
-        user: 'root',
-        database: 'ispiti',
-        password: 'nov1987'
-    };
-    const conn = mysql.createPool(access);
+
+    const conn = dbPool;
     var list = await conn.query("SELECT * FROM program");
     console.log(list);
     return list[0];

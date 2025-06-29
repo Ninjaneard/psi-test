@@ -4,6 +4,7 @@ import * as mysql from "mysql2/promise";
 import {Query} from "mysql2/typings/mysql/lib/protocol/sequences/Query";
 import {IspitModel, Odgovor, PitanjeFront, Tema} from "@/app/models";
 import {writeFileSync} from "node:fs";
+import dbPool from "@/app/lib/myslq";
 const { jsPDF } = require("jspdf");
 
 export async function addQuestion(formData:FormData)
@@ -13,12 +14,7 @@ export async function addQuestion(formData:FormData)
     var tema = formData.get('tema')
     var opis = formData.get('Opisno')=='on'?true:false;
     var odgovor = formData.get('odgovor');
-    const access: PoolOptions = {
-        user: 'root',
-        database: 'ispiti',
-        password: 'nov1987'
-    };
-    const conn = mysql.createPool(access);
+    const conn = dbPool;
     var result = await  conn.execute(`INSERT INTO pitanja (Pitanje, izbor, opisno, Odgovor, Tema) VALUES ('${pitanje}',${izbori},${opis},'${odgovor}',${tema} )`)
  //   console.log(result[0].insertId);
     var poitanjeId = result[0].insertId;
@@ -62,12 +58,7 @@ function pickRandomElements(arr, n) {
 }
 
 export async function generateIspit(ispitTemplate: Array<IspitModel>){
-    const access: PoolOptions = {
-        user: 'root',
-        database: 'ispiti',
-        password: 'nov1987'
-    };
-    const conn = mysql.createPool(access);
+    const conn = dbPool;
     let file = Array();
     let fileK = '';
     let pitanja : Array<PitanjeFront> = new Array<PitanjeFront>();
