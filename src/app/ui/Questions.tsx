@@ -5,12 +5,12 @@ import dbPool from "@/app/lib/myslq";
 async function getQuestions(temaID:number){
     const conn = dbPool;
     const list = await conn.query(`SELECT * FROM pitanja WHERE tema=${temaID}`);
-    console.log(list);
+   // console.log(list);
     return list[0];
 }
 export default async function  QuestionsList({tema}: { tema: number }){
     const pitanja = await getQuestions(tema) as Array<Pitanje>;
-    console.log(pitanja);
+  //  console.log(pitanja);
     return (
         <div>
             Pitanja:

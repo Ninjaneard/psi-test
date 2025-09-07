@@ -7,12 +7,12 @@ async function getData(){
 
     const conn = dbPool;
     const list = await conn.query("SELECT * FROM program");
-    console.log(list);
+    //console.log(list);
     return list[0];
 }
 export default async function  ProgramList(){
     const data = await getData() as Array<Program>
-    console.log(data);
+   // console.log(data);
     return (
         <div>
             <ul>

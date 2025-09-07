@@ -15,7 +15,7 @@ export default function  IspitForm({teme}: { teme: Array<Tema> }){
     });
 
     const buttonClick = async function (pitanja:IspitModel[]) {
-        console.log(pitanja);
+       // console.log(pitanja);
         const text = await generateIspit(pitanja);
         setIspit(text);
 
