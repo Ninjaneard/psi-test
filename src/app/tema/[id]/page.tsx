@@ -12,7 +12,9 @@ async function getData(id:number){
 }
 export default async function Page({params}:{params:Promise<{id:number}>})
 {
+    console.log(params);
     const {id} = await params;
+    console.log(id);
     const tema = await getData(id) as unknown as Tema;
    // console.log(tema);
     return (
