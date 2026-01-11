@@ -6,7 +6,8 @@ import dbPool from "@/app/lib/myslq";
 
 async function getData(id:number){
     const conn = dbPool;
-    const list = await conn.query(`SELECT * FROM tema WHERE ID=${id}`);
+    console.log(id);
+    const list = await conn.query(`SELECT * FROM tema WHERE ID=`+id);
    // console.log(list);
     return list[0];
 }
