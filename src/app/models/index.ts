@@ -45,3 +45,29 @@ export type IspitModel = {
     tema: number,
     nPitanja: number
 }
+export type testOdgovor = {
+    odgovorID: number,
+    Odgovor: string,
+    Tacan: boolean
+}
+export type testPitanje = {
+    TestPitanjeID: number,
+    Pitanje: string,
+    PitanjeID: number,
+    Izbor: boolean,
+    Opisno: boolean,
+    Odgovori: Array<testOdgovor>
+}
+export type testIspit = {
+    Pitanja: Array<testPitanje>,
+    Ispit: number,
+    Date: Date,
+    Ispitanik: string
+}
+export type testOdgovorSubmited = {
+    pitanjeID: number,
+    odgovor: {
+        odgovori: [],
+        opisno: string
+    }
+}

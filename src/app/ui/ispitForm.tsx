@@ -7,16 +7,16 @@ import {generateIspit} from "@/app/data/ispiti";
 //import { writeFileSync } from "fs"
 
 
-export default function  IspitForm({teme}: { teme: Array<Tema> }){
+export default function  IspitForm({teme, godina}: { teme: Array<Tema>, godina: number }){
     const [pitanja, setPitanja] = useState(new Array<IspitModel>());
     const [ispit, setIspit] = useState({
         ispit:'',
         kljuc:''
     });
 
-    const buttonClick = async function (pitanja:IspitModel[]) {
+    const buttonClick = async function (pitanja:IspitModel[], godina:number) {
        // console.log(pitanja);
-        const text = await generateIspit(pitanja);
+        const text = await generateIspit(pitanja, godina);
         setIspit(text);
 
     }
@@ -42,7 +42,7 @@ export default function  IspitForm({teme}: { teme: Array<Tema> }){
 
                 ))
             }
-            <button className={`bg-indigo-300 border-solid border-1`} onClick={() => buttonClick(pitanja)}>generisi</button>
+            <button className={`bg-indigo-300 border-solid border-1`} onClick={() => buttonClick(pitanja, godina)}>generisi</button>
 
             <div><Link className={`bg-indigo-300 border-solid border-1`} href={ispit.ispit}>Ispit</Link><Link className={`bg-indigo-300 border-solid border-2`} href={ispit.kljuc}>Kljuc</Link></div>
 

@@ -2,9 +2,10 @@
 import { ResultSetHeader, RowDataPacket} from "mysql2";
 
 
-import {IspitModel, Odgovor, PitanjeFront} from "@/app/models";
+import {IspitModel, Odgovor, PitanjeFront, testOdgovorSubmited} from "@/app/models";
 import {writeFileSync} from "node:fs";
 import dbPool from "@/app/lib/myslq";
+import { format } from 'date-fns';
 
 
 export async function addQuestion(formData:FormData)
@@ -56,13 +57,29 @@ function pickRandomElements(arr:Array<PitanjeFront>, n:number) {
     // Return the first n elements of the shuffled array
     return shuffled.slice(0, n);
 }
+async function generateIspitInDB(godina:number, datum:Date= new Date())
+{
+    const conn = dbPool;
+    const formattedDate: string = format(datum, 'yyyy-MM-dd HH:mm');
+    const query = `INSERT INTO ispiti.ispit (datum, godina) VALUES ('${formattedDate}', ${godina})`;
 
-export async function generateIspit(ispitTemplate: Array<IspitModel>){
+    const result = await conn.execute<ResultSetHeader>(query);
+    return result[0].insertId;
+}
+async function addPitanjeToIspit(ispitId:number, pitanjeId:number)
+{
+    const conn = dbPool;
+    const query = `INSERT INTO ispiti.ispit_pitanja (ispit, pitanje) VALUES (${ispitId}, ${pitanjeId})`;
+    const result = await conn.execute<ResultSetHeader>(query);
+    return result[0].insertId;
+}
+export async function generateIspit(ispitTemplate: Array<IspitModel>, godina:number){
     const conn = dbPool;
     const file = [];
     let fileK = '';
     let pitanja : PitanjeFront[] = new Array<PitanjeFront>();
     console.log(ispitTemplate);
+    const ispitId = await generateIspitInDB(godina);
     let queryt = '';
     for(const tema of ispitTemplate){
         let pitanja2 = new Array<PitanjeFront>();
@@ -110,6 +127,7 @@ export async function generateIspit(ispitTemplate: Array<IspitModel>){
     for(const pitanje of pitanja)
     {
         const pitanjeTxt = `${count}) ${pitanje.Pitanje} \n`;
+        addPitanjeToIspit(ispitId, pitanje.ID);
 
         //doc.text(pitanjeTxt, 1, 1);
         file.push(pitanjeTxt)
@@ -160,4 +178,29 @@ export async function generateIspit(ispitTemplate: Array<IspitModel>){
         flag: "w"
     });
     return resp;
+}
+
+export async function submitAnswers(odgovori: testOdgovorSubmited[], ispitanik:string){
+   try{
+       const conn = dbPool;
+       console.log(odgovori);
+
+       for(const odgovor of odgovori){
+           if(odgovor.pitanjeID != undefined)
+           {
+               const tmpOdgovor = JSON.stringify(odgovor.odgovor);
+               const query = `INSERT INTO ispit_odgovor (pitanje , korisnik,  odgovor) VALUES (${odgovor.pitanjeID}, '${ispitanik}', '${tmpOdgovor}' )`;
+               const values = [odgovor.pitanjeID, ispitanik, odgovor.odgovor];
+               console.log(query);
+               await conn.execute(query);
+           }
+
+       }
+       return {success:true};
+   }
+   catch (e) {
+       console.error(e);
+       return {success:false, message:e.message};
+   }
+
 }

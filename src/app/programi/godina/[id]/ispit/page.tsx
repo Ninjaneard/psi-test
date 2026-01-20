@@ -16,7 +16,7 @@ export default async function Page({params}:{params:Promise<{id:number}>})
     const teme = await getData(id) as Array<Tema>;
     return (
         <section className={`p-10`}>
-            <IspitForm teme={teme}></IspitForm>
+            <IspitForm teme={teme} godina={id}></IspitForm>
         </section>
     )
 }
