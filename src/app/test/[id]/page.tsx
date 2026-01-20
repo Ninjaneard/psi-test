@@ -4,12 +4,15 @@ import {Tema, testIspit, testPitanje} from "@/app/models";
 import TemaSingle from "@/app/ui/tema";
 import dbPool from "@/app/lib/myslq";
 import Test from "@/app/ui/test.tsx";
+import {RowDataPacket} from "mysql2";
 
 async function getData(id:number){
     const conn = dbPool;
-    const list = await conn.query(`SELECT ip.ID as testPitanjeID , p.ID as pitanjeID, p.Pitanje as pitanje, p.Odgovor as opOdgovor, o.Odgovor as Odgovor, o.tacan as tacan, p.izbor as izbor, p.opisno as opisno, o.ID as odgovorID FROM ispiti.ispit_profil join ispiti.ispit i on i.ID = ispit_profil.ispit join ispiti.ispit_pitanja ip on i.ID = ip.ispit join ispiti.pitanja p on p.id=ip.ID join ispiti.odgovori o on o.pitanje = p.ID where ispiti.ispit_profil.ID=${id}`);
+    const [rows] = await conn.execute(`SELECT ip.ID as testPitanjeID , p.ID as pitanjeID, p.Pitanje as pitanje, p.Odgovor as opOdgovor, o.Odgovor as Odgovor, o.tacan as tacan, p.izbor as izbor, p.opisno as opisno, o.ID as odgovorID FROM ispiti.ispit_profil join ispiti.ispit i on i.ID = ispit_profil.ispit join ispiti.ispit_pitanja ip on i.ID = ip.ispit join ispiti.pitanja p on p.id=ip.ID join ispiti.odgovori o on o.pitanje = p.ID where ispiti.ispit_profil.ID=${id}`);
     const result = new Array<testPitanje>();
-    for(const pitanje of list[0]){
+   // const listaPitanja = list[0];
+    console.log(rows);
+    for(const pitanje of rows as RowDataPacket[]){
         console.log(pitanje.izbor[0]);
         const test = result.find((item) => item.PitanjeID == pitanje.pitanjeID)
         if(test == undefined)
@@ -46,7 +49,7 @@ async function getData(id:number){
 export default async function Page({params}:{params:Promise<{id:number}>})
 {
     const {id} = await params;
-    const pitanja = await getData(id) as unknown as Tema;
+    const pitanja = await getData(id) as unknown as testIspit;
     console.log(pitanja);
     return (
         <section className={`p-8`}>

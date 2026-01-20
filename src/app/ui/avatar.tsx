@@ -7,7 +7,13 @@ export default async function UserAvatar() {
     console.log(session.user);
     return (
         <div>
-            <img src={session.user.image} alt="User Avatar" />
+            {
+                session.user.image ? <img src={session.user.image} alt="User Avatar" /> :
+                <div className="avatar">
+                    <div className="avatar__initials">{session.user.name?.charAt(0)}</div>
+                </div>
+            }
+
             <span>{session.user.name}</span>
             <span>{session.user.role}</span>
         </div>

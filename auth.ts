@@ -1,5 +1,6 @@
 import NextAuth from "next-auth"
 import { DrizzleAdapter } from "@auth/drizzle-adapter"
+import type { Adapter } from "next-auth/adapters";
 import {accounts, db, sessions, users, verificationTokens} from "@/app/data/schema.ts"
 import Resend from "next-auth/providers/resend"
 
@@ -9,7 +10,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         accountsTable: accounts,
         sessionsTable: sessions,
         verificationTokensTable: verificationTokens,
-}),
+}) as Adapter,
     providers: [Resend({
         from: "no-reply@srabct-test.org",
 

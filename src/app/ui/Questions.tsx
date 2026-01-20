@@ -10,7 +10,7 @@ async function getQuestions(temaID:number){
     return list[0];
 }
 export default async function  QuestionsList({temaID}: { temaID: Tema }){
-    const pitanja = await getQuestions(temaID[0].ID) as Array<Pitanje>;
+    const pitanja = await getQuestions(temaID.ID) as Array<Pitanje>;
 
     return (
         <div>

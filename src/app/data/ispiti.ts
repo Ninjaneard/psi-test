@@ -198,7 +198,7 @@ export async function submitAnswers(odgovori: testOdgovorSubmited[], ispitanik:s
        }
        return {success:true};
    }
-   catch (e) {
+   catch (e:any) {
        console.error(e);
        return {success:false, message:e.message};
    }
