@@ -71,3 +71,55 @@ export type testOdgovorSubmited = {
         opisno: string
     }
 }
+
+export type testListElem = {
+    korisnik: string,
+    ime: string,
+    ispit: number,
+}
+
+export type testResultOdgovori = {
+    odgovori: Array<any>,
+    kljuc: Array<testOdgovor>,
+    odgovor: string,
+    odgovorKljuc: string,
+    rezultat: number
+}
+
+export type testResultPitanja = {
+    TestPitanjeID: number,
+    Pitanje: string,
+    PitanjeID: number,
+    Izbor: boolean,
+    Opisno: boolean,
+    ProfilOdgovorID: number,
+    Odgovori: testResultOdgovori
+}
+
+export type testResult = {
+    rezultat: number,
+    pitanja: Array<testResultPitanja>,
+    ispit: number,
+    korisnik: string
+}
+
+export type testPitanjePoeni= {
+    pitanjeID: number,
+    poeni: number
+}
+
+export type studentTest = {
+    ID: number,
+    Datum: Date,
+    Program:string,
+    Godina:string,
+    Korisnik:string,
+}
+
+export type studentTestRezultati = {
+    ID: number,
+    Pitanje:number,
+    Rezultat:number,
+}
+
+

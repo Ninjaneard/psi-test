@@ -1,11 +1,13 @@
 'use server'
-import { ResultSetHeader, RowDataPacket} from "mysql2";
+import {FieldPacket, ResultSetHeader, RowDataPacket} from "mysql2";
 
 
-import {IspitModel, Odgovor, PitanjeFront, testOdgovorSubmited} from "@/app/models";
+import {IspitModel, Odgovor, PitanjeFront, testOdgovorSubmited, testPitanjePoeni} from "@/app/models";
 import {writeFileSync} from "node:fs";
 import dbPool from "@/app/lib/myslq";
+import dbPool2 from "@/app/lib/myslq2";
 import { format } from 'date-fns';
+import { Resend } from 'resend';
 
 
 export async function addQuestion(formData:FormData)
@@ -203,4 +205,58 @@ export async function submitAnswers(odgovori: testOdgovorSubmited[], ispitanik:s
        return {success:false, message:e.message};
    }
 
+}
+
+export async function oceniIspit(ocene:testPitanjePoeni[]){
+    const conn = dbPool;
+    try {
+        for (let ocena of ocene)
+        {
+            const query = `update ispiti.ispit_odgovor set rezultat = ${ocena.poeni} where id = ${ocena.pitanjeID}`;
+            await conn.execute(query);
+        }
+    }
+    catch (e:any) {
+        console.error(e);
+        return {success:false, message:e.message};
+    }
+    return {success:true};
+
+}
+
+function isValidEmail(email: string): boolean {
+    // A balanced regex pattern that catches common mistakes without being overly restrictive.
+    // It checks for a local part, an '@' symbol, a domain part, and a top-level domain (TLD) of at least 2 letters.
+    const emailRegex: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    // Optional: RFC 5321 specifies a maximum length of 254 characters for an email address.
+    const MAX_EMAIL_LENGTH = 254;
+    if (!email || email.length === 0 || email.length > MAX_EMAIL_LENGTH) {
+        return false;
+    }
+
+    return emailRegex.test(email);
+}
+
+export async function dodajUcesnike(ucesnici: string[], ispitID: number){
+    const conn = dbPool;
+    for(const ucesnik of ucesnici)
+    {
+        if(isValidEmail(ucesnik))
+        {
+            const query = `insert into ispiti.ispit_profil (korisnik, ispit) values ('${ucesnik}', ${ispitID})`;
+            const [result, fields ] = await conn.execute(query) as [ResultSetHeader, FieldPacket[]];
+            console.log(fields);
+            if(result != undefined)
+                console.log(result);
+
+                const resendCl = new Resend(process.env.AUTH_RESEND_KEY);
+                resendCl.emails.send({
+                    from: "no-reply@srabct-test.org",
+                    to: ucesnik,
+                    subject: "Link za prijavu na ispit",
+                    text: `Link za prijavu na ispit: https://srabct-test.org/test/${result.insertId}`
+                })
+            }
+    }
 }

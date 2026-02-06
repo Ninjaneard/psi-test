@@ -1,7 +1,6 @@
 'use client'
 import {testIspit, testOdgovorSubmited, testPitanje} from "@/app/models";
-import { useState, useRef, useEffect, ChangeEvent } from "react";
-import Link from "next/link";
+import { useState, useRef, useEffect } from "react";
 import {submitAnswers} from "@/app/data/ispiti.ts";
 
 
@@ -13,9 +12,10 @@ export default function  Test({test}: { test: testIspit}){
     const [odgovorO, setOdgovorO] = useState("");
     const [timers, setTimers] = useState(180);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
-    const [message, setMessage] = useState("");
-    const [isPaused, setIsPaused] = useState<boolean>(false);
+    const [message, setMessage] = useState("Dobro dosli na test. Svako pitanje ima ograniceno vreme, ne mozete se vratiti na pitanje posto je submitovano. Takodje ako napustite stranicu ili neodgovorite na pitanje u vremenskom okviru, test ce biti automatski submitovan! Za pocetak testa pretisnite dugme Start. Srecno! ");
+    const [isPaused, setIsPaused] = useState<boolean>(true);
     const [isPanalised, setIsPanelised] = useState<boolean>(false);
+    const [buttonTxt, setButtonTxt] = useState("Start");
 
     useEffect(() => {
         const loseFocus = () => {
@@ -150,6 +150,11 @@ export default function  Test({test}: { test: testIspit}){
             setPitanje(nextQ)
             setTimers(180);
             //  setIsPaused(false);
+            if(buttonTxt == "Start" )
+            {
+                setButtonTxt("Next");
+                setIsPaused(false);
+            }
             setMessage("")
         }
 
@@ -169,7 +174,7 @@ export default function  Test({test}: { test: testIspit}){
                pitanje?.Izbor == true ?
                    <div key={pitanje.PitanjeID.toString()}>
                        {pitanje.Odgovori.map((odgovor) => (
-                           <p key={odgovor.odgovorID}><label htmlFor={odgovor.odgovorID.toString()} >{odgovor.Odgovor}</label><input id={odgovor.odgovorID.toString()} name={odgovor.odgovorID.toString()} onChange={(e) => {
+                           <div key={odgovor.odgovorID}><label htmlFor={odgovor.odgovorID.toString()} >{odgovor.Odgovor}</label><input className={`border-2 border-gray-300 rounded-md p-2`} id={odgovor.odgovorID.toString()} name={odgovor.odgovorID.toString()} onChange={(e) => {
                                const tmpOdgovori = [...odgovorI];
                                const tmpOdgovor = {
                                    odgovorID: e.target.name,
@@ -179,20 +184,20 @@ export default function  Test({test}: { test: testIspit}){
                                setOdgovorI(tmpOdgovori)
                                console.log(tmpOdgovori);
                                console.log(e.target.checked, e.target.value);
-                           }} type="checkbox"/></p>
+                           }} type="checkbox"/></div>
                        ))}
                    </div> : pitanje?.Izbor
             }
             {
                 pitanje?.Opisno == true ?
                     <div>
-                        <textarea onChange={(e) => setOdgovorO(e.target.value)} id={pitanje.PitanjeID.toString()}></textarea>
+                        <textarea className={`border-2 border-gray-300 rounded-md p-2`} onChange={(e) => setOdgovorO(e.target.value)} id={pitanje.PitanjeID.toString()}></textarea>
                     </div> : pitanje?.Opisno
             }
             {
-                <button onClick={submit}>Submit</button>
+                <button className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-3`} onClick={submit}>{buttonTxt}</button>
             }
-            <b>{message}</b>
+            <div className={`text-red-700`}>{message}</div>
         </div>
 
     )
