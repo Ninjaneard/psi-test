@@ -3,7 +3,7 @@ import { DrizzleAdapter } from "@auth/drizzle-adapter"
 import type { Adapter } from "next-auth/adapters";
 import {accounts, db, sessions, users, verificationTokens} from "@/app/data/schema.ts"
 import Resend from "next-auth/providers/resend"
-export const runtime = 'nodejs';
+
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
     adapter: DrizzleAdapter(db, {
