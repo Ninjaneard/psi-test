@@ -55,7 +55,10 @@ export default function  TestResultPitanje({pitanje, handlePoeniChange, getPoeni
                         </div>: null
 
                     }
-                    <input className={`border-2 border-gray-300 rounded-md p-2`} id={pitanje.ProfilOdgovorID.toString()} type={'number'} name={'result'} value={getPoeni(pitanje.ProfilOdgovorID)} onChange={handlePoeniChange} />
+                    {
+                        pitanje.ProfilOdgovorID != null ? <input className={`border-2 border-gray-300 rounded-md p-2`} id={pitanje.ProfilOdgovorID.toString()} type={'number'} name={'result'} value={getPoeni(pitanje.ProfilOdgovorID)} onChange={handlePoeniChange} />
+                            : <span className={'tacan'}>Neodgovoreno</span>
+                    }
             </div>
 
         </div>
