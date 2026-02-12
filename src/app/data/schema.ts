@@ -10,7 +10,7 @@ import mysql from "mysql2/promise"
 import { drizzle } from "drizzle-orm/mysql2"
 import type { AdapterAccountType } from "next-auth/adapters"
 
-export const connection = await mysql.createConnection({
+export const connection = await mysql.createPool({
     host: "psytest-mysql.mysql.database.azure.com",
     user: "psitest",
     password: "N3c@1987!",
