@@ -179,6 +179,12 @@ export async function generateIspit(ispitTemplate: Array<IspitModel>, godina:num
     writeFileSync("public"+resp.kljuc,fileK, {
         flag: "w"
     });
+    writeFileSync(".next/standalone/public"+resp.ispit,file.join(''), {
+        flag: "w"
+    });
+    writeFileSync(".next/standalone/public"+resp.kljuc,fileK, {
+        flag: "w"
+    });
     return resp;
 }
 
