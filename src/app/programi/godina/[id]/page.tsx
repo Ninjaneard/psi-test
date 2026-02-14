@@ -24,6 +24,7 @@ export default async function Page({params}:{params:Promise<{id:number}>})
             <section className={`p-8`}>
                 <TemaList teme={teme}></TemaList>
                 <Link className={'border-4 border-teal-600 bg-teal-400 p-4 m-8 block'} href={`${id}/ispit`}>Napravi Ispit</Link>
+                <Link href={`${id}/ispiti`}>Lista Ispita za ovu godinu</Link>
             </section>
         )
     else redirect(`/account`);
