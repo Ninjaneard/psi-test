@@ -8,7 +8,7 @@ import {auth} from "../../../../../../../../auth.ts";
 
 async function getData(id:number){
     const conn = dbPool;
-    const [list] = await conn.query(`Select o.id as profilOdgovor, ip.ID as test, ip.korisnik as korisnik, o2.id as odgovorID, p.ID as pitanjeID, p2.Pitanje as pitanje, p2.izbor as izbor, o.odgovor as odgovor, p2.opisno as opisno, p2.Odgovor as odgovoorKljuc, o2.Odgovor as Odgovori, tacan as kljuc from ispiti.ispit_profil ip left join ispiti.ispit i on ip.ispit = i.ID left join ispiti.ispit_pitanja p on i.ID = p.ispit left join ispiti.ispit_odgovor o on p.ID = o.pitanje left join ispiti.pitanja p2 on p.pitanje = p2.ID left join ispiti.odgovori o2 on p2.ID = o2.pitanje WHERE ip.ID = ${id}`) as any[];
+    const [list] = await conn.query(`Select o.id as profilOdgovor, ip.ID as test, ip.korisnik as korisnik, o2.id as odgovorID, p.ID as pitanjeID, p2.Pitanje as pitanje, p2.izbor as izbor, o.odgovor as odgovor, p2.opisno as opisno, p2.Odgovor as odgovoorKljuc, o2.Odgovor as Odgovori, tacan as kljuc from ispiti.ispit_profil ip left join ispiti.ispit i on ip.ispit = i.ID left join ispiti.ispit_pitanja p on i.ID = p.ispit left join ispiti.ispit_odgovor o on p.ID = o.pitanje AND o.korisnik = ip.korisnik left join ispiti.pitanja p2 on p.pitanje = p2.ID left join ispiti.odgovori o2 on p2.ID = o2.pitanje WHERE ip.ID = ${id}`) as any[];
     const resultat:testResult = {
         pitanja : [],
         ispit : id,
