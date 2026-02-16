@@ -85,7 +85,7 @@ export default async function Page({params}:{params:Promise<{id:number}>})
     console.log(pitanja);
     if(res.pregledan && res.odgovoren && res.rezultat != 0)
         return <div>Rezultat: {res.rezultat}</div>;
-    else if(!res.pregledan)
+    else if(!res.pregledan && res.odgovoren)
         return <div>Ispit jos nije pregledan</div>;
     else if(!res.odgovoren )
         return (
