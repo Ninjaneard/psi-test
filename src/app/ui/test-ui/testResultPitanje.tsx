@@ -39,13 +39,13 @@ export default function  TestResultPitanje({pitanje, handlePoeniChange, getPoeni
                 </ul>
                     {
 
-                        pitanje.Opisno?
+                        pitanje.Opisno && pitanje.ProfilOdgovorID != null?
                         <div>
                             <div>
                                 <h3>Odgovor</h3>
                                 <p className={'opisno border-2 border-gray-300 rounded-md p-2'}>{
                                     // @ts-ignore
-                                    pitanje.Odgovori.odgovori.opisno
+                                    pitanje.Odgovori.odgovori != null? pitanje.Odgovori.odgovori.opisno: ""
                                 }</p>
                             </div>
                             <div>
