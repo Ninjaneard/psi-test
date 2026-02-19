@@ -5,7 +5,10 @@ type Props = {
     params: Promise<{ filename: string }>; // Change to Promise
 };
 
-export async function GET(req: NextRequest, { params }: { params: Props }) {
+export async function GET(
+    request: NextRequest,
+    { params }: { params: Promise<{ filename: string }> }
+) {
     // Define your storage path (outside of /public)
     console.log(params);
     // @ts-ignore
