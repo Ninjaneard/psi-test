@@ -171,20 +171,20 @@ export async function generateIspit(ispitTemplate: Array<IspitModel>, godina:num
         kljuc:''
     };
     console.log(file);
-    resp.ispit = `/ispit_${naziv}_${god}${date}.docx`;
-    resp.kljuc = `/ispit_${naziv}_${god}${date}_kljuc.docx`;
-    writeFileSync("public"+resp.ispit,file.join(''), {
+    resp.ispit = `/api/file/ispit_${naziv}_${god}${date}.docx`;
+    resp.kljuc = `/api/file/ispit_${naziv}_${god}${date}_kljuc.docx`;
+    writeFileSync(`public/ispit_${naziv}_${god}${date}.docx`,file.join(''), {
              flag: "w"
          });
-    writeFileSync("public"+resp.kljuc,fileK, {
+    writeFileSync(`public/ispit_${naziv}_${god}${date}.docx`,fileK, {
         flag: "w"
     });
-    writeFileSync(".next/standalone/public"+resp.ispit,file.join(''), {
-        flag: "w"
-    });
-    writeFileSync(".next/standalone/public"+resp.kljuc,fileK, {
-        flag: "w"
-    });
+    // writeFileSync(".next/standalone/public"+resp.ispit,file.join(''), {
+    //     flag: "w"
+    // });
+    // writeFileSync(".next/standalone/public"+resp.kljuc,fileK, {
+    //     flag: "w"
+    // });
     return resp;
 }
 

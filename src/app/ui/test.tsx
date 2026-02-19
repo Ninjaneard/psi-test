@@ -10,7 +10,7 @@ export default function  Test({test}: { test: testIspit}){
     const [odgovori, setOdgovori] = useState<testOdgovorSubmited[]>([]);
     const [odgovorI, setOdgovorI] = useState([]);
     const [odgovorO, setOdgovorO] = useState("");
-    const [timers, setTimers] = useState(180);
+    const [timers, setTimers] = useState(120);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
     const [message, setMessage] = useState("Dobro dosli na test. Svako pitanje ima ograniceno vreme, ne mozete se vratiti na pitanje posto je submitovano. Takodje ako napustite stranicu ili neodgovorite na pitanje u vremenskom okviru, test ce biti automatski submitovan! Za pocetak testa pretisnite dugme Start. Srecno! ");
     const [isPaused, setIsPaused] = useState<boolean>(true);
@@ -148,7 +148,7 @@ export default function  Test({test}: { test: testIspit}){
             setOdgovorI([]);
             setOdgovorO("");
             setPitanje(nextQ)
-            setTimers(180);
+            setTimers(120);
             //  setIsPaused(false);
             if(buttonTxt == "Start" )
             {
