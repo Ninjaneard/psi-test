@@ -1,4 +1,5 @@
 import {SignOut} from "@/app/ui/account/signout-button.tsx";
+import Link from "next/link";
 
 export default function DashboardLayout({
                                             children, // will be a page or nested layout
@@ -9,6 +10,7 @@ export default function DashboardLayout({
         <section className="h-screen">
             {/* Include shared UI here e.g. a header or sidebar */}
             <nav className="float-left flex min-w-52 text-slate-400 h-full bg-cyan-800">
+                <Link href={`/account`}>Pocetna Strana</Link>
                 <SignOut></SignOut>
             </nav>
 
