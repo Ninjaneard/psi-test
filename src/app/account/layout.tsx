@@ -10,7 +10,9 @@ export default function DashboardLayout({
         <section className="h-screen">
             {/* Include shared UI here e.g. a header or sidebar */}
             <nav className="float-left flex min-w-52 text-slate-400 h-full bg-cyan-800">
-                <Link href={`/account`}>Pocetna Strana</Link>
+                <div>
+                    <Link className={`block underline text-amber-100 hover:text-amber-300`} href={`/account`}>Pocetna Strana</Link>
+                </div>
                 <SignOut></SignOut>
             </nav>
 

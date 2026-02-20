@@ -12,10 +12,11 @@ export default function  Test({test}: { test: testIspit}){
     const [odgovorO, setOdgovorO] = useState("");
     const [timers, setTimers] = useState(120);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
-    const [message, setMessage] = useState("Dobro dosli na test. Svako pitanje ima ograniceno vreme, ne mozete se vratiti na pitanje posto je submitovano. Takodje ako napustite stranicu ili neodgovorite na pitanje u vremenskom okviru, test ce biti automatski submitovan! Za pocetak testa pretisnite dugme Start. Srecno! ");
+    const [message, setMessage] = useState("Dobro došli na ispit. Svako pitanje ima ograničeno vreme. Ne možete se vratiti na pitanje nakon što kliknete dume \"next\" koje vodi do narednog pitanja. Takođe, ako napustite stranicu ili ne odgovorite na pitanje u vremenskom okviru koje odbrojava tajmer, ispit će biti automatski predat! \n Za početak rada testa pritisnite dugme Start. Srećno!");
     const [isPaused, setIsPaused] = useState<boolean>(true);
     const [isPanalised, setIsPanelised] = useState<boolean>(false);
     const [buttonTxt, setButtonTxt] = useState("Start");
+    const [count, setCount] = useState(0);
 
     useEffect(() => {
         const loseFocus = () => {
@@ -56,7 +57,7 @@ export default function  Test({test}: { test: testIspit}){
         if(isPanalised)
         {
             submit();
-            setMessage("Predhodno pitanje je završeno jer ste otisli sa stranice");
+            setMessage("Predhodno pitanje je završeno jer ste otišli sa stranice.");
 
         }
         else
@@ -121,13 +122,13 @@ export default function  Test({test}: { test: testIspit}){
                     "Greska pri slanju rezultata"
                 )
                 console.log(res);
-                setMessage("Doslo je do greske probajte ponovo!")
+                setMessage("Došlo je do greske, probajte ponovo!")
             }
             else {
                 console.log(
                     "Rezultati su poslati"
                 )
-                setMessage("Ispit je zavrsen, rezultate ce da dobijete u narednim danima. Hvala!")
+                setMessage("Ispit je završen, rezultate ćete dobiti u narednim danima. Hvala!")
                 setPitanje(null);
             }
 
@@ -156,6 +157,7 @@ export default function  Test({test}: { test: testIspit}){
                 setIsPaused(false);
             }
             setMessage("")
+            setCount(count + 1);
         }
 
 
@@ -166,7 +168,7 @@ export default function  Test({test}: { test: testIspit}){
     return (
         <div key={pitanje?.TestPitanjeID.toString()}>
             <p>{timers} s</p>
-            <p>{pitanje?.Pitanje}</p>
+            <p>{count}{pitanje?.Pitanje}</p>
 
 
             {
