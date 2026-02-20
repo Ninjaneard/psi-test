@@ -171,12 +171,14 @@ export async function generateIspit(ispitTemplate: Array<IspitModel>, godina:num
         kljuc:''
     };
     console.log(file);
-    resp.ispit = `/api/file/ispit_${naziv}_${god}${date}.docx`;
-    resp.kljuc = `/api/file/ispit_${naziv}_${god}${date}_kljuc.docx`;
-    writeFileSync(`public/ispit_${naziv}_${god}${date}.docx`,file.join(''), {
+    const testFname = `ispit_${naziv}_${god}${date}.docx`;
+    const kljucFname = `ispit_${naziv}_${god}${date}_kljuc.docx`;
+    resp.ispit = `/api/file/${testFname}`;
+    resp.kljuc = `/api/file/${kljucFname}`;
+    writeFileSync(`public/${testFname}`,file.join(''), {
              flag: "w"
          });
-    writeFileSync(`public/ispit_${naziv}_${god}${date}.docx`,fileK, {
+    writeFileSync(`public/${kljucFname}`,fileK, {
         flag: "w"
     });
     // writeFileSync(".next/standalone/public"+resp.ispit,file.join(''), {
