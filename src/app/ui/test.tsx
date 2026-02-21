@@ -24,7 +24,7 @@ export default function  Test({test}: { test: testIspit}){
             setIsPaused(true);
             if(!isPanalised)
             {
-                submit()
+                //submit()
                 setMessage("You lost focus!");
                 console.log(
                     "You lost focus!"
@@ -157,9 +157,9 @@ export default function  Test({test}: { test: testIspit}){
                 setIsPaused(false);
             }
             setMessage("")
-
+            setCount(10-pitanja.length);
         }
-        setCount(count + 1);
+
 
 
         //console.log(odgovori);
@@ -168,7 +168,7 @@ export default function  Test({test}: { test: testIspit}){
     return (
         <div key={pitanje?.TestPitanjeID.toString()}>
             <p>{timers} s</p>
-            <p>{count}. {pitanje?.Pitanje}</p>
+            <p>{pitanje!=null?count:""}. {pitanje?.Pitanje}</p>
 
 
             {
